@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Behat" default="default" basedir=".">
+
+	<!-- AVAILABLE COMMANDS -->
+	<target name="default"
+		description="Running full test suite ..."
+		depends="test.behat" />
+		<!-- END -->
+
+		<!-- BEHAT -->
+		<target name="test.behat">
+			<exec command="vendor/bin/behat --format junit --out result"/>
+		</target>
+		<!-- END -->
+	</project>

@@ -1,0 +1,23 @@
+# Default profile.
+# Common settings for all profiles
+default:
+  suites:
+    default:
+      filters:
+        tags: "~@wip"
+      contexts:
+        - FeatureContext
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      # Use goutte (basic PHP browser, super fast) as the default driver.
+      default_session: selenium2
+      # For real browser testing and tests requiring JS use selenium2 driver.
+      # Tag features/scenarious with @javascript to use the selenium2 driver.
+      javascript_session: selenium2
+      # URL of the site when accessed inside Drude.
+      base_url: http://
+      selenium2:
+        wd_host: saniruddha:e75e78cb-100c-4ae6-8ec1-9d28a9db6acf@ondemand.saucelabs.com/wd/hub
+      # Stick with chrome by default. It's 2x faster than firefox or phantomjs (your results may vary).
+      browser_name: chrome

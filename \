@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+    ServerName 52.66.15.72
+    ProxyRequests Off
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+    ProxyPreserveHost on
+    ProxyPass / http://localhost:8080/
+</VirtualHost>
+
