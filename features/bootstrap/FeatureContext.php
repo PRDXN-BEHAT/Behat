@@ -64,7 +64,6 @@ class FeatureContext extends MinkContext
     $element->click();
   }
 
-
   /**
   * @When /^I switch window$/
   */
@@ -153,6 +152,7 @@ class FeatureContext extends MinkContext
     }
     $element->click();
   }
+
   /**
   * @When /^(?:|I )select the voucher$/
   */
@@ -163,7 +163,6 @@ class FeatureContext extends MinkContext
     $text = $selectElement->getText();
     $output = $text;
   }
-
 
   /**
   * @When /^I filled "(?P<field>(?:[^"]|\\")*)" with output element$/
