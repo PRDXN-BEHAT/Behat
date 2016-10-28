@@ -9,7 +9,7 @@
 
 		<!-- BEHAT -->
 		<target name="test.behat">
-			<exec command="vendor/bin/behat --format junit --out result"/>
+			<exec command="vendor/bin/behat --format junit --out result" failonerror="true"/>
 		</target>
 		<!-- END -->
 	</project>
