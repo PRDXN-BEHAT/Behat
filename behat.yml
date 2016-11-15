@@ -18,6 +18,6 @@ default:
       # URL of the site when accessed inside Drude.
       base_url: http://
       selenium2:
-        wd_host: 127.0.0.1:4444/wd/hub
+        wd_host: Kchetan:dfe5d9a1-33ac-49fc-b71d-c40d3cfbf812@ondemand.saucelabs.com/wd/hub
       # Stick with chrome by default. It's 2x faster than firefox or phantomjs (your results may vary).
       browser_name: chrome
