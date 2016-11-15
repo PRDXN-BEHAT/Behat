@@ -14,7 +14,6 @@ namespace Symfony\Component\DependencyInjection\Tests;
 require_once __DIR__.'/Fixtures/includes/classes.php';
 require_once __DIR__.'/Fixtures/includes/ProjectExtension.php';
 
-use Symfony\Bridge\PhpUnit\ErrorAssert;
 use Symfony\Component\Config\Resource\ResourceInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -59,18 +58,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @requires function Symfony\Bridge\PhpUnit\ErrorAssert::assertDeprecationsAreTriggered
+     * @group legacy
+     * @expectedDeprecation The "deprecated_foo" service is deprecated. You should stop using it, as it will soon be removed.
      */
     public function testCreateDeprecatedService()
     {
-        ErrorAssert::assertDeprecationsAreTriggered('The "deprecated_foo" service is deprecated. You should stop using it, as it will soon be removed.', function () {
-            $definition = new Definition('stdClass');
-            $definition->setDeprecated(true);
+        $definition = new Definition('stdClass');
+        $definition->setDeprecated(true);
 
-            $builder = new ContainerBuilder();
-            $builder->setDefinition('deprecated_foo', $definition);
-            $builder->get('deprecated_foo');
-        });
+        $builder = new ContainerBuilder();
+        $builder->setDefinition('deprecated_foo', $definition);
+        $builder->compile();
+        $builder->get('deprecated_foo');
     }
 
     public function testRegister()
@@ -626,14 +625,12 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container->set('a', new \stdClass());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testThrowsExceptionWhenAddServiceOnAFrozenContainer()
     {
         $container = new ContainerBuilder();
         $container->compile();
-        $container->set('a', new \stdClass());
+        $container->set('a', $foo = new \stdClass());
+        $this->assertSame($foo, $container->get('a'));
     }
 
     public function testNoExceptionWhenSetSyntheticServiceOnAFrozenContainer()

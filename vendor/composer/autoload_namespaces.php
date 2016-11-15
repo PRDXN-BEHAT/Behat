@@ -9,7 +9,6 @@ return array(
     'WebDriver' => array($vendorDir . '/instaclick/php-webdriver/lib'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
-    'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Behat\\Transliterator' => array($vendorDir . '/behat/transliterator/src'),
     'Behat\\Testwork' => array($vendorDir . '/behat/behat/src'),
     'Behat\\Symfony2Extension' => array($vendorDir . '/behat/symfony2-extension/src'),

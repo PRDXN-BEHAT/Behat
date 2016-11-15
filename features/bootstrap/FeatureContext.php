@@ -5,23 +5,15 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Mink\Driver\Selenium2Driver;
 
 /**
 * Defines application features from the specific context.
 */
 class FeatureContext extends MinkContext
 {
-  public $output = NULL,$nodes=NULL;
-  /**
-  * Initializes context.
-  *
-  * Every scenario gets its own context instance.
-  * You can also pass arbitrary arguments to the
-  * context constructor through behat.yml.
-  */
-  public function __construct()
-  {
-  }
+  public $output = NULL;
+  public $nodes=NULL;
 
   /**
   * @Given I click the :arg1 element
@@ -67,7 +59,7 @@ class FeatureContext extends MinkContext
   /**
   * @When /^I switch window$/
   */
-  public function WindowSwitch()
+  public function windowSwitch()
   {
     $windowNames = $this->getSession()->getWindowNames();
     if(count($windowNames) > 1) {
@@ -159,7 +151,7 @@ class FeatureContext extends MinkContext
   public function selectVoucher() {
     global $output;
     $page = $this->getSession()->getPage();
-    $selectElement = $page->find('css', '.aXjCH > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(1) > span');
+    $selectElement = $page->find('css', '.aXjCH > div:nth-child(2) tr:nth-child(5) > span');
     $text = $selectElement->getText();
     $output = $text;
   }
@@ -227,6 +219,79 @@ class FeatureContext extends MinkContext
   }
 
   /**
+  * @Then /^(?:|I )should see Alt text as "(?P<text>(?:[^"]|\\")*)"$/
+  */
+  public function assertPageContainsAltText($text)
+  {
+    $session = $this->getSession();
+    $element = $session->getPage()->find('css', '.slides > li > a > img[alt="'.$text.'"]');
+    if($element->getAttribute('alt')!=$text){
+      throw new \InvalidArgumentException(sprintf('Cannot find alt text'));
+    }
+  }
+
+  /**
+  * @When /^I click on the help link$/
+  */
+  public function iClickOnTheHelpLink()
+  {
+    $session = $this->getSession();
+    $element = $session->getPage()->find('css', 'header:nth-child(1) > div:nth-child(1) > a:nth-child(2)');
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Cannot find link'));
+    }
+    $element->click();
+  }
+
+  /**
+ * @When /^I hover over the element$/
+ */
+  public function iHoverOverTheElement()
+  {
+    $session = $this->getSession(); 
+    $element = $session->getPage()->find('css','#menu-item-564 > a:nth-child(2)');
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
+    }
+    $element->mouseOver();
+  }
+
+  /**
+  * @Then /^I should see selected region "([^"]*)" elements and product should have "([^"]*)"$/
+  */
+  public function iShouldSeeSelectedRegion($element, $content)
+  {
+    $container = $this->getSession()->getPage();
+    $list = $container->findAll('css', $element);
+    for($i=0; $i<count($list); $i++) {
+      $count=0;
+      $var = $list[$i]->getAttribute('class');
+      $arr = explode(" ", $var);
+      foreach ($arr as &$value) {
+        if($value==$content) {
+          $count++;
+        }
+      }
+      if($count<1){
+        $message = sprintf('product is not proper as per region.');
+        throw new Exception($message);
+      }
+    }
+  }
+
+    /**
+  * @Then /^(?:|I )should see href as "(?P<text>(?:[^"]|\\")*)"$/
+  */
+    public function assertPageContainsHref($text)
+    {
+      $session = $this->getSession();
+      $element = $session->getPage()->find('css', '.border-ul-wrap a[href="'.$text.'"]');
+      if($element->getAttribute('href')!=$text){
+        throw new \InvalidArgumentException(sprintf('Cannot find href text'));
+      }
+    }
+
+  /**
   * @When I scroll :elementId into view
   */
   public function scrollIntoView($elementId) {
@@ -244,16 +309,5 @@ JS;
       throw new \Exception("ScrollIntoView failed");
     }
   }
-
-  /**
-  * @Then /^(?:|I )should see Alt text as "(?P<text>(?:[^"]|\\")*)"$/
-  */
-  public function assertPageContainsAltText($text)
-  {
-    $session = $this->getSession();
-    $element = $session->getPage()->find('css', '.slides > li > a > img[alt="'.$text.'"]');
-    if($element->getAttribute('alt')!=$text){
-      throw new \InvalidArgumentException(sprintf('Cannot find alt text'));
-    }
-  }
 }
+
